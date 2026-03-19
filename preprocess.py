@@ -7,8 +7,8 @@ import regex as rg
 SAMPLE_LENGTH = 15
 
 # match strings with only latin characters
-# accents, digits, symbols, and punctuation are allowed
-validChars = rg.compile(r'[\p{IsLatin}\s\p{P}\d]')
+# accents, digits, and punctuation are allowed
+validChars = rg.compile(r'[\p{IsLatin}\s\p{P}\d]+$')
 
 def break_down(text, length):
     """Split long strings into shorter strings with uniform length.
@@ -58,6 +58,6 @@ for i in range(len(workingLanguages)):
     with open(workingLanguages[i] + ".csv", "w") as file:
         file.write(workingLanguages[i] + "\n")
         for line in langData[i]:
-            if validChars.match(line):
+            if validChars.fullmatch(line):
                 file.write(line + "\n")
 
