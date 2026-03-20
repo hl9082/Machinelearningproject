@@ -1,2 +1,3 @@
 https://www.edu.uwo.ca/about/faculty-profiles/stuart-webb/_docs/essential-word-list.pdf  # English function words
-https://tanelpoder.com/posts/list-of-100-function-words-translated/
+https://tanelpoder.com/posts/list-of-100-function-words-translated/                      # Eng/Span/Fren Function words
+https://bishalbose294.medium.com/nlp-text-encoding-a-beginners-guide-fa332d715854        # encoding techniques for text
