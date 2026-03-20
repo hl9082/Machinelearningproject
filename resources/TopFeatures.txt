@@ -1,0 +1,41 @@
+English:
+  the
+  and
+  of
+  to
+  in
+  is
+  that
+  it
+  for
+  on
+  with
+
+Spanish:
+  el
+  la
+  las
+  un
+  una
+  para
+  en
+  y
+  que
+  con
+  de
+  es
+  
+
+French:
+  le
+  les
+  et
+  pour
+  de
+  du
+  des
+  est
+  une
+  en
+  
+  
