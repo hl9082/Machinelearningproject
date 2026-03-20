@@ -1,3 +1,14 @@
+"""
+preprocess.py
+
+Author: Noah Shin
+
+For each desired language, this program pulls all records in that language from a
+kagglehub dataset, reorganizes them into 15-word lines, removes any lines containing invalid characters,
+and sends the output to a .csv file.
+"""
+
+
 import pandas as pd
 import kagglehub
 from kagglehub import KaggleDatasetAdapter
