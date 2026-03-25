@@ -17,7 +17,7 @@ function_words = [
     # English
     "the", "and", "of", "to", "in", "is", "that", "it", "for", "on", "with",
     # Spanish
-    "el", "la", "las", "un", "una", "para", "en", "y", "que", "con", "de", "es",
+    "el", "la", "las", "un", "una", "para",  "y", "que", "con", "es",
     # French
     "le", "les", "et", "pour", "de", "du", "des", "est", "une", "en"
 ]
@@ -26,7 +26,7 @@ texts = []
 labels = []
 
 for language in workingLanguages:
-    with open(language + ".csv", "r") as file:
+    with open("../data/" + language + ".csv", "r", encoding ="utf-8") as file:
         next(file)
         for line in file:
             line = line.strip().lower()
