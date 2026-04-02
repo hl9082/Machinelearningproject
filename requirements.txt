@@ -2,3 +2,5 @@ pandas
 numpy
 kagglehub
 regex
+joblib
+pathlib
