@@ -4,3 +4,6 @@ kagglehub
 regex
 joblib
 pathlib
+scikit-learn
+joblib
+
