@@ -11,7 +11,7 @@ This project builds a machine learning model that can classify inputted text dat
 The pipeline is broken down into four distinct stages:
 1. **Data Preprocessing** (`preprocess.py`): Downloads the raw dataset via KaggleHub, filters for valid characters, and normalizes text into 15-word chunks.
 2. **Feature Encoding** (`DTEncoding.py`): Reads the processed data and utilizes a `CountVectorizer` to map text to a predefined vocabulary of function words, exporting the results as NumPy arrays (`X.npy` and `Y.npy`).
-3. **Model Training** (`TrainDT.py`): Splits the encoded arrays into training and testing sets, trains a standard CART Decision Tree, evaluates its accuracy, and serializes the model into a `.joblib` file.
+3. **Model Training** (`train_model.py`): Splits the encoded arrays into training and testing sets, trains a standard CART Decision Tree, evaluates its accuracy, and serializes the model into a `.joblib` file.
 4. **Inference Pipeline** (`predict.py`): Loads the serialized model and processes new, unseen user text to predict its language.
 
 ## Requirements
