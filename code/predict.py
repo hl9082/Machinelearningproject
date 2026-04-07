@@ -13,112 +13,54 @@ import joblib
 from sklearn.feature_extraction.text import CountVectorizer
 from pathlib import Path
 
-class LanguageClassifier:
-    """Inference pipeline for the language decision tree classifier.
+class ModelComparator:
+    """Loads multiple trained models to compare their live inferences."""
 
-    This class loads a pre-trained decision tree model and reconstructs the 
-    exact text preprocessing pipeline (vocabulary and label encoding) used 
-    during the training phase to ensure accurate predictions on new data.
-
-    Attributes:
-        model (sklearn.tree.DecisionTreeClassifier): The loaded decision tree model 
-            used for inference.
-        function_words (list of str): The hardcoded list of function words used as 
-            features, maintaining the exact order from training.
-        vectorizer (sklearn.feature_extraction.text.CountVectorizer): The vectorizer 
-            used to transform raw strings into numerical feature arrays.
-        label_map (dict): A mapping from integer model predictions back to 
-            human-readable language names.
-    """
-
-    def __init__(self, model_path):
-        """Initializes the LanguageClassifier.
-
-        Loads the trained model from disk and recreates the vocabulary and 
-        label mappings used by DTEncoding.py during the data preparation phase.
-
-        Args:
-            model_path (str or pathlib.Path): The absolute or relative file path 
-                pointing to the trained DT.joblib file.
-
-        Raises:
-            FileNotFoundError: If the model file cannot be found at the specified path.
-        """
-        # 1. Load the trained decision tree model
-        self.model = joblib.load(model_path)
-        
-        # 2. Recreate the exact vocabulary from DTEncoding.py
+    def __init__(self, models_dir):
         self.function_words = [
-            # English
             "the", "and", "of", "to", "in", "is", "that", "it", "for", "on", "with",
-            # Spanish
             "el", "la", "las", "un", "una", "para",  "y", "que", "con", "es",
-            # French
             "le", "les", "et", "pour", "de", "du", "des", "est", "une", "en"
         ]
-        
-        # Initialize CountVectorizer exactly as Jesse did
         self.vectorizer = CountVectorizer(vocabulary=self.function_words)
+        self.label_map = {0: "English", 1: "French", 2: "Spanish"}
         
-        # 3. Recreate the LabelEncoder mapping
-        # sklearn's LabelEncoder sorts alphabetically: English=0, French=1, Spanish=2
-        self.label_map = {
-            0: "English",
-            1: "French",
-            2: "Spanish"
+        # Load all three models
+        self.models = {
+            "Decision Tree": joblib.load(models_dir / "Decision_Tree.joblib"),
+            "Random Forest": joblib.load(models_dir / "Random_Forest.joblib"),
+            "Neural Network": joblib.load(models_dir / "Neural_Network.joblib")
         }
 
-    def predict(self, text):
-        """Predicts the language of a given text string.
-
-        Converts the raw input string into a numerical feature vector using the 
-        CountVectorizer, passes it to the loaded decision tree model, and maps 
-        the resulting integer prediction to a language name.
-
-        Args:
-            text (str): The raw text string to be classified.
-
-        Returns:
-            str: The predicted language (e.g., "English", "French", "Spanish"). 
-                 Returns an error string if the input text is empty or purely whitespace.
-        """
+    def predict_all(self, text):
         if not text.strip():
-            return "Error: Empty text provided."
+            return "Error: Empty text."
 
-        # Step 1: Vectorize the text 
-        # (CountVectorizer expects an iterable of strings, hence the list bracket)
         vectorized_text = self.vectorizer.transform([text]).toarray()
         
-        # Step 2: Pass the 2D feature array to the model
-        prediction_int = self.model.predict(vectorized_text)[0]
-        
-        # Step 3: Map the integer back to a human-readable language string
-        predicted_language = self.label_map.get(prediction_int, "Unknown Language")
-        
-        return predicted_language
+        print(f"Text: '{text}'")
+        # Ask each model for its prediction
+        for name, model in self.models.items():
+            pred_int = model.predict(vectorized_text)[0]
+            pred_lang = self.label_map.get(pred_int, "Unknown")
+            print(f"  > {name:15}: {pred_lang}")
+        print("-" * 50)
 
-# ==========================================
-# Execution / Testing
-# ==========================================
 if __name__ == "__main__":
-    # Resolve path dynamically to handle relative execution
     dir_path = Path(__file__).resolve().parent
-    model_file = dir_path / "DT.joblib"
     
     try:
-        pipeline = LanguageClassifier(model_path=model_file)
+        comparator = ModelComparator(models_dir=dir_path)
         
-        # Test with new, unseen text snippets
         test_samples = [
             "The quick brown fox jumps over the lazy dog.",
             "El zorro marrón rápido salta sobre el perro perezoso.",
-            "Le renard brun rapide saute par-dessus le chien paresseux."
+            "Le renard brun rapide saute par-dessus le chien paresseux.",
+            "The le un and pour" # A tricky edge case to see if they disagree!
         ]
         
         for sample in test_samples:
-            print(f"Text: '{sample}'")
-            print(f"Prediction: {pipeline.predict(sample)}")
-            print("-" * 50)
+            comparator.predict_all(sample)
             
-    except FileNotFoundError:
-        print(f"Error: Could not find model at {model_file}. Did you run TrainDT.py first?")
+    except FileNotFoundError as e:
+        print(f"Error loading models. Have you run the updated train_models.py? Details: {e}")

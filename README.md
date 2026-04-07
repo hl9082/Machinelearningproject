@@ -11,8 +11,19 @@ This project builds a machine learning model that can classify inputted text dat
 The pipeline is broken down into four distinct stages:
 1. **Data Preprocessing** (`preprocess.py`): Downloads the raw dataset via KaggleHub, filters for valid characters, and normalizes text into 15-word chunks.
 2. **Feature Encoding** (`DTEncoding.py`): Reads the processed data and utilizes a `CountVectorizer` to map text to a predefined vocabulary of function words, exporting the results as NumPy arrays (`X.npy` and `Y.npy`).
-3. **Model Training** (`TrainDT.py`): Splits the encoded arrays into training and testing sets, trains a standard CART Decision Tree, evaluates its accuracy, and serializes the model into a `.joblib` file.
+3. **Model Training** (`train_models.py`): Splits the encoded arrays into training and testing sets, trains a standard CART Decision Tree, evaluates its accuracy, and serializes the model into a `.joblib` file.
 4. **Inference Pipeline** (`predict.py`): Loads the serialized model and processes new, unseen user text to predict its language.
+
+## Requirements
+Ensure you have the following dependencies installed before running the pipeline:
+* `scikit-learn`
+* `numpy`
+* `pandas`
+* `kagglehub`
+* `regex`
+* `joblib`
+* `matplotlib`
+* `seaborn`
 
 ## How to Run
 
@@ -24,7 +35,6 @@ python -m venv <name>
 <name>\scripts\Activate
 
 pip install -r requirements.txt
-(Ensure your requirements.txt includes scikit-learn, numpy, pandas, kagglehub, regex, and joblib)
 
 **2. Fetch and Preprocess the Data**
 Run the preprocessing script to download the dataset and generate the language-specific CSV files.
@@ -38,15 +48,15 @@ Convert the CSV text data into numerical vectors. This will generate X.npy and Y
 python DTEncoding.py
 ```
 
-**4. Train the Model**
-Train the decision tree classifier. This script will print the model's accuracy on the test split and save the trained model as DT.joblib.
+**4. Train the Models**
+Run the automated training pipeline. This script will train all three models, perform cross-validation, and output the accuracies to the terminal. It will also generate three .png confusion matrix heatmaps and save the best model as best_model.joblib.
 
 ```
-python TrainDT.py
+python train_models.py
 ```
 
-**5. Test the Model (Inference)**
-Run the prediction script to test the model on new, unseen text snippets.
+**5. Test the Models (Inference)**
+Run the prediction script to test the models on new, unseen text snippets.
 ```
 python predict.py
 ```
