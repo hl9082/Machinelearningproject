@@ -133,7 +133,7 @@ def main():
         print(classification_report(l_test, l_predicted))
         print("-" * 50)
 
-        # ADD THIS: Save each tuned model individually
+        # Save each tuned model individually
         file_name = model_name.replace(" ", "_").replace("_(MLP)", "") + ".joblib"
         joblib.dump(best_model_for_type, dir_path / file_name)
         
