@@ -38,15 +38,15 @@ Convert the CSV text data into numerical vectors. This will generate X.npy and Y
 python DTEncoding.py
 ```
 
-**4. Train the Model**
-Train the decision tree classifier. This script will print the model's accuracy on the test split and save the trained model as DT.joblib.
+**4. Train the Models**
+Train the 3 models: Decision Tree, Random Forest, and MLP Classifier. This script will print the models' accuracy on the test split and save the check points as .joblib files.
 
 ```
-python TrainDT.py
+python train_models.py
 ```
 
-**5. Test the Model (Inference)**
-Run the prediction script to test the model on new, unseen text snippets.
+**5. Test the Models (Inference)**
+Run the prediction script to test the models on new, unseen text snippets.
 ```
 python predict.py
 ```
