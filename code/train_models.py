@@ -17,17 +17,22 @@ evaluates each model on a test set, and saves the best performing model
 as a .joblib file for production inference.
 
 """
-
+#scikit-learn imports
 import sklearn as sk
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
 import numpy as np
 from pathlib import Path
 import joblib
 import warnings
+
+# Data Visualization
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Ignore convergence warnings from MLPClassifier for cleaner terminal output
 from sklearn.exceptions import ConvergenceWarning
@@ -48,6 +53,44 @@ print("Accuracy: " + str(accuracy_score(l_test, l_predicted)))
 
 joblib.dump(dt, dir/"DT.joblib")
 '''
+
+def plot_and_save_confusion_matrix(y_true, y_pred, model_name, output_dir):
+    """Generates and saves a heatmap for the confusion matrix.
+
+    Args:
+        y_true (np.ndarray): The actual true labels from the test set.
+        y_pred (np.ndarray): The labels predicted by the model.
+        model_name (str): The name of the model (used for the title and filename).
+        output_dir (Path): The directory where the PNG file will be saved.
+    """
+    # Compute the confusion matrix
+    cm = confusion_matrix(y_true, y_pred)
+    
+    # Label mapping based on DTEncoding.py's LabelEncoder (Alphabetical)
+    classes = ["English", "French", "Spanish"]
+    
+    # Set up the matplotlib figure
+    plt.figure(figsize=(8, 6))
+    
+    # Create a Seaborn heatmap
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=False,
+                xticklabels=classes, yticklabels=classes,
+                annot_kws={"size": 14})
+    
+    # Add titles and labels
+    plt.title(f'Confusion Matrix: {model_name}', fontsize=16, pad=15)
+    plt.ylabel('Actual Language', fontsize=12)
+    plt.xlabel('Predicted Language', fontsize=12)
+    plt.xticks(fontsize=11)
+    plt.yticks(fontsize=11, rotation=0)
+    
+    # Ensure layout is tight so nothing gets cut off
+    plt.tight_layout()
+    
+    # Save to disk
+    safe_filename = model_name.replace(" ", "_").replace("_(MLP)", "") + "_CM.png"
+    plt.savefig(output_dir / safe_filename, dpi=300)
+    plt.close() # Close the figure to free up memory
 
 def main():
     """Main execution function for the training and evaluation pipeline."""
@@ -128,6 +171,10 @@ def main():
         
         print(f"  Best Parameters: {grid_search.best_params_}")
         print(f"  Test Accuracy: {test_accuracy:.4f}")
+
+        # GENERATE AND SAVE CONFUSION MATRIX
+        plot_and_save_confusion_matrix(l_test, l_predicted, model_name, dir_path)
+        print(f"  Saved Confusion Matrix to disk.")
         
         # Optional: Print detailed classification report to see precision/recall per language
         print(classification_report(l_test, l_predicted))

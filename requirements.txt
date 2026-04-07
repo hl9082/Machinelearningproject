@@ -6,4 +6,5 @@ joblib
 pathlib
 scikit-learn
 joblib
-
+matplotlib
+seaborn
