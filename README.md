@@ -14,6 +14,17 @@ The pipeline is broken down into four distinct stages:
 3. **Model Training** (`TrainDT.py`): Splits the encoded arrays into training and testing sets, trains a standard CART Decision Tree, evaluates its accuracy, and serializes the model into a `.joblib` file.
 4. **Inference Pipeline** (`predict.py`): Loads the serialized model and processes new, unseen user text to predict its language.
 
+## Requirements
+Ensure you have the following dependencies installed before running the pipeline:
+* `scikit-learn`
+* `numpy`
+* `pandas`
+* `kagglehub`
+* `regex`
+* `joblib`
+* `matplotlib`
+* `seaborn`
+
 ## How to Run
 
 **1. Clone the repository and install dependencies**
@@ -24,7 +35,6 @@ python -m venv <name>
 <name>\scripts\Activate
 
 pip install -r requirements.txt
-(Ensure your requirements.txt includes scikit-learn, numpy, pandas, kagglehub, regex, and joblib)
 
 **2. Fetch and Preprocess the Data**
 Run the preprocessing script to download the dataset and generate the language-specific CSV files.
@@ -39,7 +49,7 @@ python DTEncoding.py
 ```
 
 **4. Train the Models**
-Train the 3 models: Decision Tree, Random Forest, and MLP Classifier. This script will print the models' accuracy on the test split and save the check points as .joblib files.
+Run the automated training pipeline. This script will train all three models, perform cross-validation, and output the accuracies to the terminal. It will also generate three .png confusion matrix heatmaps and save the best model as best_model.joblib.
 
 ```
 python train_models.py
