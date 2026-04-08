@@ -53,7 +53,7 @@ raw = kagglehub.dataset_load(KaggleDatasetAdapter.PANDAS,
                               "dataset.csv")
 
 # more languages will be added later
-workingLanguages = ["English", "French", "Spanish"]
+workingLanguages = ["English", "French", "Spanish", "Dutch", "Portugese", "Estonian"]
 langData = []
 for i in workingLanguages:
     langData.append([])
