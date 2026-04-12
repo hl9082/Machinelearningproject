@@ -54,13 +54,7 @@ class LanguageClassifier:
             # Spanish
             "el", "la", "las", "un", "una", "para",  "y", "que", "con", "es",
             # French
-            "le", "les", "et", "pour", "de", "du", "des", "est", "une", "en",
-            # Portuguese
-            "a", "o", "e", "do", "da", "em", "os", "as", "no", "na",
-            # Dutch
-            "van", "het", "een", "op", "met", "voor", "zijn", "te", "door", "werd",
-            # Estonian
-            "ja", "ei", "see", "ta", "kui", "ka", "oli", "või", "oma", "mis"
+            "le", "les", "et", "pour", "de", "du", "des", "est", "une", "en"
         ]
         
         # Initialize CountVectorizer exactly as Jesse did
@@ -71,10 +65,7 @@ class LanguageClassifier:
         self.label_map = {
             0: "English",
             1: "French",
-            2: "Spanish",
-            3:  "Dutch",
-            4:  "Portugese",
-            5:  "Estonian"
+            2: "Spanish"
         }
 
     def predict(self, text):
