@@ -11,7 +11,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
 
-workingLanguages = ["English", "French", "Spanish"]
+workingLanguages = ["English", "French", "Spanish", "Dutch", "Portugese", "Estonian"]
 
 function_words = [
     # English
@@ -19,7 +19,13 @@ function_words = [
     # Spanish
     "el", "la", "las", "un", "una", "para",  "y", "que", "con", "es",
     # French
-    "le", "les", "et", "pour", "de", "du", "des", "est", "une", "en"
+    "le", "les", "et", "pour", "de", "du", "des", "est", "une", "en",
+    # Portuguese
+    "a", "o", "e", "do", "da", "em", "os", "as", "no", "na",
+    # Dutch
+    "van", "het", "een", "op", "met", "voor", "zijn", "te", "door", "werd",
+    # Estonian
+    "ja", "ei", "see", "ta", "kui", "ka", "oli", "või", "oma", "mis"
 ]
 
 texts = []
