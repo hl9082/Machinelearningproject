@@ -8,7 +8,7 @@ CSV files per language within a local 'data' directory.
 
 Author:
     Noah Shin
-    Huy Le
+Co-author: Huy Le
 """
 
 import os
