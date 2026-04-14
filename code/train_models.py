@@ -1,5 +1,5 @@
 """
-TrainDT.py
+train_models.py
 
 Authors: Noah Shin, Huy Le
 
