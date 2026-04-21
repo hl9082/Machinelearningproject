@@ -34,6 +34,9 @@ import warnings
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+#for saving best parameters for each model
+import json
+
 # Ignore convergence warnings from MLPClassifier for cleaner terminal output
 from sklearn.exceptions import ConvergenceWarning
 warnings.filterwarnings("ignore", category=ConvergenceWarning)
@@ -144,6 +147,9 @@ def main():
     best_overall_accuracy = 0.0
     best_overall_name = ""
 
+    # ADD THIS: Create an empty dictionary to hold all parameters
+    all_best_params = {}
+
     print("=== Starting Model Training & Hyperparameter Tuning ===\n")
 
     for model_name, config in models_config.items():
@@ -164,6 +170,9 @@ def main():
         
         # Extract the best model from the grid search
         best_model_for_type = grid_search.best_estimator_
+
+        # ADD THIS: Save this model's winning parameters to our dictionary
+        all_best_params[model_name] = grid_search.best_params_
         
         # Evaluate on the unseen test set
         l_predicted = best_model_for_type.predict(v_test)
@@ -190,6 +199,11 @@ def main():
             best_overall_model = best_model_for_type
             best_overall_name = model_name
 
+    # ADD THIS AFTER THE LOOP FINISHES: Save the master dictionary to JSON
+    params_path = dir_path / "all_best_params.json"
+    with open(params_path, "w") as f:
+        json.dump(all_best_params, f, indent=4)
+    print(f"Saved all hyperparameters to {params_path}")
     # 4. Model Selection and Serialization
     print("=== Training Complete ===")
     print(f"Champion Model: {best_overall_name} with Accuracy of {best_overall_accuracy:.4f}")
