@@ -174,19 +174,30 @@ def main():
         # ADD THIS: Save this model's winning parameters to our dictionary
         all_best_params[model_name] = grid_search.best_params_
         
-        # Evaluate on the unseen test set
-        l_predicted = best_model_for_type.predict(v_test)
-        test_accuracy = accuracy_score(l_test, l_predicted)
+        l_train_predicted = best_model_for_type.predict(v_train)
+        train_accuracy = accuracy_score(l_train, l_train_predicted)
         
         print(f"  Best Parameters: {grid_search.best_params_}")
-        print(f"  Test Accuracy: {test_accuracy:.4f}")
+        print(f"  Training Accuracy: {train_accuracy:.4f}")
+        print( "  Training Metrics: ")
+        
+        # Optional: Print detailed classification report to see precision/recall per language
+        print(classification_report(l_train, l_train_predicted))
+        print("-" * 50)
 
+        # Evaluate on the unseen test set
+        l_test_predicted = best_model_for_type.predict(v_test)
+        test_accuracy = accuracy_score(l_test, l_test_predicted)
+        
+        #print(f"  Best Parameters: {grid_search.best_params_}")
+        print(f"  Test Accuracy: {test_accuracy:.4f}")
+        print( "  Test metrics: ")
         # GENERATE AND SAVE CONFUSION MATRIX
-        plot_and_save_confusion_matrix(l_test, l_predicted, model_name, dir_path)
+        plot_and_save_confusion_matrix(l_test, l_test_predicted, model_name, dir_path)
         print(f"  Saved Confusion Matrix to disk.")
         
         # Optional: Print detailed classification report to see precision/recall per language
-        print(classification_report(l_test, l_predicted))
+        print(classification_report(l_test, l_test_predicted))
         print("-" * 50)
 
         # Save each tuned model individually
