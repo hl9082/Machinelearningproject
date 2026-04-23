@@ -26,6 +26,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
 import numpy as np
+import pandas as pd
 from pathlib import Path
 import joblib
 import warnings
@@ -94,6 +95,35 @@ def plot_and_save_confusion_matrix(y_true, y_pred, model_name, output_dir):
     safe_filename = model_name.replace(" ", "_").replace("_(MLP)", "") + "_CM.png"
     plt.savefig(output_dir / safe_filename, dpi=300)
     plt.close() # Close the figure to free up memory
+
+def create_barplot(dict, model_name, dir, train=False):
+    status = "Test"
+    if train:
+        status = "Training"
+    classes = ["English", "French", "Spanish"]
+    classIdx = ["0", "1", "2"]
+    metric_names = ["precision", "recall", "f1-score"]
+
+    graphdata = []
+
+    for classif, metrics in dict.items():
+        if classif in classIdx:
+            for metric, score in metrics.items():
+                if metric in metric_names:
+                    graphdata.append({
+                        "Class": classes[int(classif)],
+                        "Metric": metric,
+                        "Score": score
+                    })
+    df = pd.DataFrame(graphdata)
+    axis = sns.barplot(df, x="Metric", y="Score", hue="Class")
+    for bar in axis.containers:
+        axis.bar_label(bar, fmt="%.2f")
+    plt.title(f'{model_name} Performance: {status} Data', fontsize=15, pad=15)
+
+    safe_filename = model_name.replace(" ", "_").replace("_(MLP)", "") + f"_{status}_Bar.png"
+    plt.savefig(dir / safe_filename, dpi=300)
+    plt.clf()
 
 def main():
     """Main execution function for the training and evaluation pipeline."""
@@ -183,6 +213,7 @@ def main():
         
         # Optional: Print detailed classification report to see precision/recall per language
         print(classification_report(l_train, l_train_predicted))
+        create_barplot(classification_report(l_train, l_train_predicted, output_dict=True), model_name, dir_path, train=True)
         print("-" * 50)
 
         # Evaluate on the unseen test set
@@ -198,6 +229,7 @@ def main():
         
         # Optional: Print detailed classification report to see precision/recall per language
         print(classification_report(l_test, l_test_predicted))
+        create_barplot(classification_report(l_test, l_test_predicted, output_dict=True), model_name, dir_path)
         print("-" * 50)
 
         # Save each tuned model individually
